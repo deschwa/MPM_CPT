@@ -1,14 +1,16 @@
 using LinearAlgebra
 using StaticArrays
 
-struct Material
-    name::Symbol
-    density::Float64
+abstract type AbstractMaterial end
+
+struct LinearElastic <: AbstractMaterial
     E::Float64
     ν::Float64
+    density::Float64
+    constitutive_model::Function
 end
 
-mutable struct MaterialPoint
+mutable struct MaterialPoint{Material<:AbstractMaterial}
     pos::MVector{2, Float64}
     vel::MVector{2, Float64}
     σ::MMatrix{2, 2, Float64}
