@@ -13,6 +13,7 @@ export MaterialPoint, find_adjacent_nodes
 mutable struct MaterialPoint{MaterialType<:AbstractMaterial}
     pos::MVector{2, Float64}
     vel::MVector{2, Float64}
+    ext_force::MVector{2, Float64}
     
     m::Float64
     V::Float64
@@ -20,6 +21,7 @@ mutable struct MaterialPoint{MaterialType<:AbstractMaterial}
 
     F::SMatrix{2,2,Float64,4}
     σ::SMatrix{2,2,Float64,4}
+    L::SMatrix{2,2,Float64}
 
     material::MaterialType
 
@@ -58,6 +60,11 @@ function find_adjacent_nodes!(mp::MaterialPoint, grid::Grid{Nx, Ny}) where {Nx, 
     ]
 
     mp.nodes = node_indices
+end
+
+
+function update_particle!(mps::Vector{MaterialPoint})
+
 end
 
 end
