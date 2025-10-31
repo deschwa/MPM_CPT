@@ -2,7 +2,7 @@ module Grid2D
 
 using StaticArrays
 
-export GridNode, Grid
+export GridNode, Grid, reset_grid!, get_grid_velocities!, update_momenta!, fix_dirichlet_nodes!
 
 mutable struct GridNode
     pos::SVector{2, Float64}

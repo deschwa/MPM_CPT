@@ -6,8 +6,9 @@ module MaterialPoint2D
 using ..Materials
 using ..Grid2D
 using StaticArrays
+using LinearAlgebra
 
-export MaterialPoint, find_adjacent_nodes
+export MaterialPoint, find_adjacent_nodes, update_particle!
 
 
 mutable struct MaterialPoint{MaterialType<:AbstractMaterial}
@@ -17,6 +18,7 @@ mutable struct MaterialPoint{MaterialType<:AbstractMaterial}
     
     m::Float64
     V::Float64
+    V_0::Float64
     ρ::Float64
 
     F::SMatrix{2,2,Float64,4}
@@ -37,7 +39,7 @@ mutable struct MaterialPoint{MaterialType<:AbstractMaterial}
         nodes = SVector{4, SVector{2, Float64}}(undef)
         N_I = SVector{4, Float64}(undef)
         dNdx_I = SVector{4, SVector{Float64}}(undef)
-        new{MaterialType}(pos, vel, m, V, ρ, F, σ, material, nodes, N_I, dNdx_I)
+        new{MaterialType}(pos, vel, m, V, V, ρ, F, σ, material, nodes, N_I, dNdx_I)
     end
 end
 
@@ -63,8 +65,12 @@ function find_adjacent_nodes!(mp::MaterialPoint, grid::Grid{Nx, Ny}) where {Nx, 
 end
 
 
-function update_particle!(mps::Vector{MaterialPoint})
-
+function update_particle!(mps::Vector{MaterialPoint}, dt)
+    for mp in mps
+        mp.F .= (I(2) .+ mp.L * dt) * mp.F
+        mp.V = det(mp.F) * mp.V_0
+        stress_update!(mp::MaterialPoint{LinearElastic})
+    end
 end
 
 end
