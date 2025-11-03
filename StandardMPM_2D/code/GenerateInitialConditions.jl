@@ -44,17 +44,17 @@ function read_YAML(YAMLfile::String)
 
 end
 
-function read_particles_csv_2D(file::String)
+function read_particles_csv_2D(file::String, material_dict::Dict{String, AbstractMaterial})
     df = CSV.File(file) |> DataFrame
 
-    mps = Vector{MaterialPoint2D.MaterialPoint{MaterialType}}()
+    mps = Vector{MaterialPoint{MaterialType}}()
 
     for row in eachrow(df)
         pos = MVector{2, Float64}(row[1], row[2])
         vel = MVector{2, Float64}(row[3], row[4])
         m = row[5]
         V = row[6]
-        material = get_material(row[7])
+        material = material_dict[row[7]]
 
         push!(mps, MaterialPoint2D.MaterialPoint(pos, vel, m, V, material))
     end
