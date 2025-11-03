@@ -9,6 +9,8 @@ using ..MaterialPoint2D
 using ..Grid2D
 
 
+export read_YAML, read_particles_csv_2D
+
 """Reads the YAML"""
 function read_YAML(YAMLfile::String)
     yaml_data = YAML.load_file(YAMLfile)

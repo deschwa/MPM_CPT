@@ -1,5 +1,9 @@
+module ShapeFunctions
+
 using ..Grid2D
 using ..MaterialPoint2D
+
+export linear_shape_funcitons!
 
 
 """
@@ -37,4 +41,4 @@ function linear_shape_funcitons!(mp::MaterialPoint,  grid::Grid{Nx, Ny}) where {
 end
 
 
-
+end # module
